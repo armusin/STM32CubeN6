@@ -73,7 +73,7 @@ uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
 uint32_t UserTxBufPtrIn;
 uint32_t UserTxBufPtrOut;
 
-UART_HandleTypeDef *uart_handler;
+//UART_HandleTypeDef *uart_handler;
 extern TX_EVENT_FLAGS_GROUP EventFlag;
 
 UX_SLAVE_CLASS_CDC_ACM_LINE_CODING_PARAMETER CDC_VCP_LineCoding =
@@ -109,7 +109,7 @@ VOID USBD_CDC_ACM_Activate(VOID *cdc_acm_instance)
 
   /* Save the CDC instance */
   cdc_acm = (UX_SLAVE_CLASS_CDC_ACM*) cdc_acm_instance;
-
+#if 0
   /* Configure the UART peripheral */
   USBX_APP_UART_Init(&uart_handler);
 
@@ -146,21 +146,21 @@ VOID USBD_CDC_ACM_Activate(VOID *cdc_acm_instance)
 
   /* Get UART StopBits */
   CDC_VCP_LineCoding.ux_slave_class_cdc_acm_parameter_stop_bit = uart_handler->Init.StopBits;
-
+#endif
   /* Set device class_cdc_acm with default parameters */
   if (ux_device_class_cdc_acm_ioctl(cdc_acm, UX_SLAVE_CLASS_CDC_ACM_IOCTL_SET_LINE_CODING,
                                     &CDC_VCP_LineCoding) != UX_SUCCESS)
   {
     Error_Handler();
   }
-
+#if 0
   /* Receive an amount of data in interrupt mode */
   if (HAL_UART_Receive_IT(uart_handler, (uint8_t *)UserTxBufferFS, 1) != HAL_OK)
   {
     /* Transfer error in reception process */
     Error_Handler();
   }
-
+#endif
   /* USER CODE END USBD_CDC_ACM_Activate */
 
   return;
@@ -180,9 +180,10 @@ VOID USBD_CDC_ACM_Deactivate(VOID *cdc_acm_instance)
   /* Reset the cdc acm instance */
   cdc_acm = UX_NULL;
 
+#if 0
   /* DeInitialize the UART peripheral */
   HAL_UART_DeInit(uart_handler);
-
+#endif
   /* USER CODE END USBD_CDC_ACM_Deactivate */
 
   return;
@@ -295,22 +296,44 @@ VOID usbx_cdc_acm_read_thread_entry(ULONG thread_input)
       if (actual_length != 0)
       {
         /* Send the data via UART */
+#if 0
         if (HAL_UART_Transmit_DMA(uart_handler, (uint8_t *)UserRxBufferFS, actual_length) != HAL_OK)
         {
           Error_Handler();
         }
+#endif
 
+        char prompt[] = "USB CDC ACM is running\r\n";
+
+        size_t len = strlen(prompt);
+
+        if (UserTxBufPtrIn + len <= APP_TX_DATA_SIZE)
+        {
+        	memcpy((uint8_t *)UserTxBufferFS + UserTxBufPtrIn, prompt, len);
+        	UserTxBufPtrIn += len;
+        }
+        else {
+        	// todo ...
+        }
+
+        if (tx_event_flags_set(&EventFlag, RX_NEW_RECEIVED_DATA, TX_OR) != TX_SUCCESS)
+        {
+          Error_Handler();
+        }
+#if 0
         /* Wait until the requested flag TX_NEW_TRANSMITTED_DATA is received */
         if (tx_event_flags_get(&EventFlag, TX_NEW_TRANSMITTED_DATA, TX_OR_CLEAR,
                                &senddataflag, TX_WAIT_FOREVER) != TX_SUCCESS)
         {
           Error_Handler();
         }
+#endif
       }
       else
       {
         /* Sleep thread for 10ms if no data received */
-        tx_thread_sleep(MS_TO_TICK(10));
+        tx_thread_sleep(MS_TO_TICK(1000));
+
       }
     }
     else
@@ -418,14 +441,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   {
     UserTxBufPtrIn = 0;
   }
-
+#if 0
   /* Start another reception: provide the buffer pointer with offset and the buffer size */
   if (HAL_UART_Receive_IT(uart_handler, (uint8_t *)UserTxBufferFS + UserTxBufPtrIn, 1) != HAL_OK)
   {
     /* Transfer error in reception process */
     Error_Handler();
   }
-
+#endif
 }
 
 /**
@@ -450,6 +473,7 @@ static VOID USBD_CDC_VCP_Config(UX_SLAVE_CLASS_CDC_ACM_LINE_CODING_PARAMETER
                                 *CDC_VCP_LineCoding)
 {
   /* Deinitialization UART */
+#if 0
   if (HAL_UART_DeInit(uart_handler) != HAL_OK)
   {
     /* Deinitialization Error */
@@ -564,6 +588,7 @@ static VOID USBD_CDC_VCP_Config(UX_SLAVE_CLASS_CDC_ACM_LINE_CODING_PARAMETER
 
   /* Start reception: provide the buffer pointer with offset and the buffer size */
   HAL_UART_Receive_IT(uart_handler, (uint8_t *)(UserTxBufferFS + UserTxBufPtrIn), 1);
+#endif
 }
 
 /* USER CODE END 1 */

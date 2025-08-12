@@ -37,7 +37,7 @@ extern "C" {
   * @{
   */
 
-#ifndef STM32N6XX_NUCLEO_USBPD_PWR_H
+#ifndef STM32N6570_DISCOVERY_USBPD_PWR_H
 /** @defgroup POWER_Exported_Types Exported Types
   * @{
   */

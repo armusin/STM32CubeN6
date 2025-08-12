@@ -51,7 +51,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "stm32n6xx_nucleo_usbpd_pwr.h"
+#include "stm32n6570_discovery_usbpd_pwr.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

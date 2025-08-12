@@ -278,6 +278,21 @@
 			<locationURI>PARENT-7-PROJECT_LOC/Drivers/BSP/Components/tcpp0203/tcpp0203_reg.c</locationURI>
 		</link>
 		<link>
+			<name>Drivers/BSP/STM32N6570-DK/stm32n6570_discovery.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Drivers/BSP/STM32N6570-DK/stm32n6570_discovery.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/BSP/STM32N6570-DK/stm32n6570_discovery_bus.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Drivers/BSP/STM32N6570-DK/stm32n6570_discovery_bus.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/BSP/STM32N6570-DK/stm32n6570_discovery_usbpd_pwr.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Drivers/BSP/STM32N6570-DK/stm32n6570_discovery_usbpd_pwr.c</locationURI>
+		</link>
+		<link>
 			<name>Drivers/BSP/STM32N6xx_Nucleo/stm32n6xx_nucleo.c</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Drivers/BSP/STM32N6xx_Nucleo/stm32n6xx_nucleo.c</locationURI>

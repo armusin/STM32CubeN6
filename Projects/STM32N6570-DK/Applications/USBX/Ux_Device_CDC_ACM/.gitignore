@@ -1,0 +1,6 @@
+.vscode
+STM32CubeIDE/FSBL/Debug
+*.bat
+*.launch
+STM32CubeIDE/FSBL/.settings
+STM32CubeIDE/.settings
